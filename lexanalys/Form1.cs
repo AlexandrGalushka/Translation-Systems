@@ -24,6 +24,25 @@ namespace lexanalys
                     CodeBox.Text = sr.ReadToEnd();
                 }
             };
+            AnalysButton.MouseClick += (o, e) =>
+            {
+                if (CodeBox.Text != null)
+                {
+                    try
+                    {
+                        Lex.Lex Lex = new Lex.Lex();
+                        Lex.Analys(CodeBox.Lines);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Сначала введите текст программы!");
+                }
+            };
             
         }
     }
