@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Lex
 {
@@ -42,14 +40,14 @@ namespace Lex
             "func",
             "return"
         };
-        private string[] Operators = { "+", "-", "*", "/", "%", "<", ">", "=", "==", "!=", "<=", ">=" };
+        private string[] Operators = { "+", "-", "*", "/", "%", "<", ">", "=", "==", "!=", "<=", ">=", "&&", "||" };
         private string[] Delimiters = { "(", ")", "\"", "{", "}", ";", ",", "[", "]", " " };
-        private string[] OperatorSymbols = { "+", "-", "*", "/", "%", "<", ">", "=", "!" };
+        private string[] OperatorSymbols = { "+", "-", "*", "/", "%", "<", ">", "=", "!", "&", "|" };
 
         private Regex IndentifierReg = new Regex(@"^[a-z|A-Z]+\w*$");
         private Regex DoubleConstReg = new Regex(@"^-?\d+\.\d+$");
         private Regex IntConstReg = new Regex(@"^-?\d+$");
-        private Regex StringConstReg = new Regex("^\"\\S*\"$");
+        private Regex StringConstReg = new Regex("^\"" + @"\S" + "\"$");
 
 
 
@@ -83,7 +81,7 @@ namespace Lex
                         }
                         else
                         {
-                            throw new Exception("Error at " + i + 1 + " line at " + j + 1 + "position");
+                            throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
                         }
                     }
                     else
@@ -95,16 +93,16 @@ namespace Lex
                         {
                             tmplex += nextSymb;
                             j++;
-                            nextSymb = text[i][j+1].ToString();
+                            nextSymb = text[i][j + 1].ToString();
                         }
                         if (tmplex.BelongTo(ReservedWords)) type = LexType.ReservedWord;
                         else if (IndentifierReg.IsMatch(tmplex)) type = LexType.Indentifier;
                         else if (StringConstReg.IsMatch(tmplex)) type = LexType.StringConst;
                         else if (IntConstReg.IsMatch(tmplex)) type = LexType.IntConst;
                         else if (DoubleConstReg.IsMatch(tmplex)) type = LexType.DoubleConst;
-                        else throw new Exception("Error at " + i + 1 + " line at " + j + 1 + "position");
-                    
-                        collection.Add(new Lexema(i+1, pos, type, tmplex));
+                        else throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
+
+                        collection.Add(new Lexema(i + 1, pos, type, tmplex));
                     }
                 }
             }
@@ -115,43 +113,49 @@ namespace Lex
     }
 
     //бежим посимвольно
-        //если символ это разделитель
-            //пхаем его в лексемы как разделитель
-        //иначе если символ входит в множество знаков операций 
-            //если следующий символ тоже входит во множество знаков операций
-                //склеиваем эти 2 символа
-            //если полученная строка является лексемой 
-                //добавляем в список лексем
-            //иначе ексепшн
-        //иначе наращиваем слово
-            //пока следующий символ не является разделителем и не входит во множество знаков операций
-                //наращиваем лексему
-            //*после цикла*
-            //если полученное слово является лексемой класа "зарезервированные слова"
-                //пхаем в список лексем как зарезервированное слово
-            //иначе если это слово подходит как идентификатор
-                //пхаем как идентификатор
-            //иначе если это слово подходит как стрингконст
-                //пхаем как стринг конст
-            //иначе если подходит как инт
-                //пхаем как инт
-            //иначе если подходит как дабл
-                //пхаем как дабл
+    //если символ это разделитель
+    //пхаем его в лексемы как разделитель
+    //иначе если символ входит в множество знаков операций 
+    //если следующий символ тоже входит во множество знаков операций
+    //склеиваем эти 2 символа
+    //если полученная строка является лексемой 
+    //добавляем в список лексем
+    //иначе ексепшн
+    //иначе наращиваем слово
+    //пока следующий символ не является разделителем и не входит во множество знаков операций
+    //наращиваем лексему
+    //*после цикла*
+    //если полученное слово является лексемой класа "зарезервированные слова"
+    //пхаем в список лексем как зарезервированное слово
+    //иначе если это слово подходит как идентификатор
+    //пхаем как идентификатор
+    //иначе если это слово подходит как стрингконст
+    //пхаем как стринг конст
+    //иначе если подходит как инт
+    //пхаем как инт
+    //иначе если подходит как дабл
+    //пхаем как дабл
 
 
 
-    public struct Lexema
+    public class Lexema
     {
-        int line;
-        int position;
-        LexType type;
-        string name;
+        public int line { get; set; }
+        public int position { get; set; }
+        public LexType type { get; set; }
+        public string name { get; set; }
         public Lexema(int line, int pos, LexType type, string name)
         {
             this.line = line;
             this.position = pos;
             this.type = type;
             this.name = name;
+        }
+
+        public override string ToString()
+        {
+            string jsonedObject = JsonConvert.SerializeObject(this);
+            return jsonedObject;
         }
     }
 }

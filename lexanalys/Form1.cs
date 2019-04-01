@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace lexanalys
@@ -30,8 +23,10 @@ namespace lexanalys
                 {
                     try
                     {
-                        Lex.Lex Lex = new Lex.Lex();
-                        Lex.Analys(CodeBox.Lines);
+                        Lex.Lex lex = new Lex.Lex();
+                        ICollection<Lex.Lexema> list = lex.Analys(CodeBox.Lines);
+                        string serializedCollection = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+                        File.WriteAllText(Environment.CurrentDirectory + "\\file.json", serializedCollection);
                     }
                     catch (Exception ex)
                     {
@@ -43,7 +38,7 @@ namespace lexanalys
                     MessageBox.Show("Сначала введите текст программы!");
                 }
             };
-            
+
         }
     }
 }
