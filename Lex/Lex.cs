@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Lex
 {
@@ -19,8 +17,8 @@ namespace Lex
     }
     public class Lex
     {
-        
-        private string[] ReservedWords = 
+
+        private string[] ReservedWords =
         {
             "for",
             "while",
@@ -38,68 +36,126 @@ namespace Lex
             "signal",
             "hz",
             "convol",
-            "timeof"
+            "timeof",
+            "func",
+            "return"
         };
-        private string[] OperationMarks = { "+", "-", "*", "/", "%", "<", ">", "=", "==", "!=", "<=", ">=" };
-        private string[] Delimiters = { "(", ")", "\"", "{", "}", ";", ",", "[","]", " "};
-        private string[] Identifiers = { };
-        private string[] StringConsts = { };
-        private string[] NumberIntConsts = { };
-        private string[] NumberDoubleConsts = { };
+        private string[] Operators = { "+", "-", "*", "/", "%", "<", ">", "=", "==", "!=", "<=", ">=", "&&", "||" };
+        private string[] Delimiters = { "(", ")", "\"", "{", "}", ";", ",", "[", "]", " " };
+        private string[] OperatorSymbols = { "+", "-", "*", "/", "%", "<", ">", "=", "!", "&", "|" };
+
         private Regex IndentifierReg = new Regex(@"^[a-z|A-Z]+\w*$");
         private Regex DoubleConstReg = new Regex(@"^-?\d+\.\d+$");
         private Regex IntConstReg = new Regex(@"^-?\d+$");
-        private Regex StringConstReg = new Regex("^\"\\S*\"$");
+        private Regex StringConstReg = new Regex("^\"" + @"\S" + "\"$");
 
 
 
 
-        ICollection <Lexema> Analys(string[] text)
+        public ICollection<Lexema> Analys(string[] text)
         {
             List<Lexema> collection = new List<Lexema>();
-            for (int i = 0; i < text.Length - 1; i++)
+            for (int i = 0; i < text.Length; i++)
             {
-                for(int j = 0; j < text[i].Length; j++)
+                for (int j = 0; j < text[i].Length; j++)
                 {
-                    string tmplex = string.Empty + text[j];
-                    while (!text[i][j + 1].ToString().BelongTo(Delimiters) && !text[i][j + 1].ToString().BelongTo(OperationMarks))
+                    string currSymb = text[i][j].ToString();
+                    string nextSymb = j <= text[i].Length - 2 ? text[i][j + 1].ToString() : " ";
+                    if (currSymb.BelongTo(Delimiters))
                     {
-                        tmplex += text[i][j + 1];
-                        j++;
+                        if (currSymb != " ")
+                        {
+                            collection.Add(new Lexema(i + 1, j + 1, LexType.Delimiter, currSymb));
+                        }
                     }
-                    LexType type;
-                    if (tmplex.BelongTo(ReservedWords)) type = LexType.ReservedWord;
-                    else if (tmplex.BelongTo(Delimiters)) type = LexType.Delimiter;
-                    else if (tmplex.BelongTo(OperationMarks)) type = LexType.OperationMark;
-                    else if (IndentifierReg.IsMatch(tmplex)) type = LexType.Indentifier;
-                    else if (IntConstReg.IsMatch(tmplex)) type = LexType.IntConst;
-                    else if (DoubleConstReg.IsMatch(tmplex)) type = LexType.DoubleConst;
-                    else if (StringConstReg.IsMatch(tmplex)) type = LexType.StringConst;
-                    else throw new Exception("Error in " + i + 1 + " line at " + j + 1 + " position");
+                    else if (currSymb.BelongTo(OperatorSymbols))
+                    {
+                        string tmplex = currSymb;
+                        if (nextSymb.BelongTo(OperatorSymbols))
+                        {
+                            tmplex += nextSymb;
+                        }
+                        if (tmplex.BelongTo(Operators))
+                        {
+                            collection.Add(new Lexema(i + 1, j + 1, LexType.OperationMark, tmplex));
+                        }
+                        else
+                        {
+                            throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
+                        }
+                    }
+                    else
+                    {
+                        string tmplex = currSymb;
+                        int pos = j + 1;
+                        LexType type;
+                        while (!nextSymb.BelongTo(Delimiters) && !nextSymb.BelongTo(OperatorSymbols))
+                        {
+                            tmplex += nextSymb;
+                            j++;
+                            nextSymb = text[i][j + 1].ToString();
+                        }
+                        if (tmplex.BelongTo(ReservedWords)) type = LexType.ReservedWord;
+                        else if (IndentifierReg.IsMatch(tmplex)) type = LexType.Indentifier;
+                        else if (StringConstReg.IsMatch(tmplex)) type = LexType.StringConst;
+                        else if (IntConstReg.IsMatch(tmplex)) type = LexType.IntConst;
+                        else if (DoubleConstReg.IsMatch(tmplex)) type = LexType.DoubleConst;
+                        else throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
 
-                    collection.Add(new Lexema(i + 1, j + 1, type, tmplex));
-
+                        collection.Add(new Lexema(i + 1, pos, type, tmplex));
+                    }
                 }
             }
-            return new List<Lexema>();
-            
+            return collection;
+
         }
 
     }
-    
 
-    public struct Lexema
+    //бежим посимвольно
+    //если символ это разделитель
+    //пхаем его в лексемы как разделитель
+    //иначе если символ входит в множество знаков операций 
+    //если следующий символ тоже входит во множество знаков операций
+    //склеиваем эти 2 символа
+    //если полученная строка является лексемой 
+    //добавляем в список лексем
+    //иначе ексепшн
+    //иначе наращиваем слово
+    //пока следующий символ не является разделителем и не входит во множество знаков операций
+    //наращиваем лексему
+    //*после цикла*
+    //если полученное слово является лексемой класа "зарезервированные слова"
+    //пхаем в список лексем как зарезервированное слово
+    //иначе если это слово подходит как идентификатор
+    //пхаем как идентификатор
+    //иначе если это слово подходит как стрингконст
+    //пхаем как стринг конст
+    //иначе если подходит как инт
+    //пхаем как инт
+    //иначе если подходит как дабл
+    //пхаем как дабл
+
+
+
+    public class Lexema
     {
-        int line;
-        int position;
-        LexType type;
-        string name;
+        public int line { get; set; }
+        public int position { get; set; }
+        public LexType type { get; set; }
+        public string name { get; set; }
         public Lexema(int line, int pos, LexType type, string name)
         {
             this.line = line;
             this.position = pos;
             this.type = type;
             this.name = name;
+        }
+
+        public override string ToString()
+        {
+            string jsonedObject = JsonConvert.SerializeObject(this);
+            return jsonedObject;
         }
     }
 }
@@ -108,7 +164,7 @@ public static class StringExstensions
 {
     public static bool BelongTo(this string name, string[] LexemClass)
     {
-        foreach(var lex in LexemClass)
+        foreach (var lex in LexemClass)
         {
             if (lex == name)
             {
