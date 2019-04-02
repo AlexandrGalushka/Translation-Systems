@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Lex;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+
 
 namespace lexanalys
 {
@@ -37,6 +39,20 @@ namespace lexanalys
                 {
                     MessageBox.Show("Сначала введите текст программы!");
                 }
+            };
+            CodeBox.TextChanged += (o, e) =>
+            {
+                string[] nums = new string[CodeBox.Lines.Length];
+                for (int i = 1; i <= CodeBox.Lines.Length; i++)
+                {
+                    nums[i-1] = i.ToString();
+                }
+                numericCode.Lines = nums;
+            };
+            CodeBox.VScroll += (o, e) => 
+            {
+                numericCode.Select(numericCode.Text.Length - 1, 0);
+                numericCode.ScrollToCaret();
             };
 
         }

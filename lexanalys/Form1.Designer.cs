@@ -31,20 +31,23 @@
             this.CodeBox = new System.Windows.Forms.RichTextBox();
             this.ReadCode = new System.Windows.Forms.Button();
             this.AnalysButton = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.numericCode = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // CodeBox
             // 
-            this.CodeBox.Location = new System.Drawing.Point(28, 91);
+            this.CodeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CodeBox.Location = new System.Drawing.Point(89, 91);
             this.CodeBox.Name = "CodeBox";
-            this.CodeBox.Size = new System.Drawing.Size(836, 547);
+            this.CodeBox.Size = new System.Drawing.Size(796, 547);
             this.CodeBox.TabIndex = 0;
             this.CodeBox.Text = "";
             // 
             // ReadCode
             // 
-            this.ReadCode.Location = new System.Drawing.Point(51, 29);
+            this.ReadCode.Location = new System.Drawing.Point(89, 29);
             this.ReadCode.Name = "ReadCode";
             this.ReadCode.Size = new System.Drawing.Size(124, 44);
             this.ReadCode.TabIndex = 1;
@@ -53,28 +56,29 @@
             // 
             // AnalysButton
             // 
-            this.AnalysButton.Location = new System.Drawing.Point(206, 29);
+            this.AnalysButton.Location = new System.Drawing.Point(219, 29);
             this.AnalysButton.Name = "AnalysButton";
             this.AnalysButton.Size = new System.Drawing.Size(128, 44);
             this.AnalysButton.TabIndex = 2;
             this.AnalysButton.Text = "Разобрать";
             this.AnalysButton.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // numericCode
             // 
-            this.button3.Location = new System.Drawing.Point(427, 40);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.numericCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericCode.Location = new System.Drawing.Point(12, 91);
+            this.numericCode.Name = "numericCode";
+            this.numericCode.Size = new System.Drawing.Size(71, 547);
+            this.numericCode.TabIndex = 4;
+            this.numericCode.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(897, 650);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.numericCode);
             this.Controls.Add(this.AnalysButton);
             this.Controls.Add(this.ReadCode);
             this.Controls.Add(this.CodeBox);
@@ -89,7 +93,7 @@
         private System.Windows.Forms.RichTextBox CodeBox;
         private System.Windows.Forms.Button ReadCode;
         private System.Windows.Forms.Button AnalysButton;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.RichTextBox numericCode;
     }
 }
 

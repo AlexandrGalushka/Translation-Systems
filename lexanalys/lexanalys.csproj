@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lex\Lex.csproj">
-      <Project>{f421398b-a29e-4568-88e1-a53f3d1cf7b3}</Project>
+      <Project>{F421398B-A29E-4568-88E1-A53F3D1CF7B3}</Project>
       <Name>Lex</Name>
     </ProjectReference>
   </ItemGroup>
