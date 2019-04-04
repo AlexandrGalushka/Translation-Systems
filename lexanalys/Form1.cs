@@ -29,6 +29,7 @@ namespace lexanalys
                         List<Lex.Lexema> list = lex.Analys(CodeBox.Lines).ToList();
                         //string serializedCollection = Newtonsoft.Json.JsonConvert.SerializeObject(list);
                         //File.WriteAllText(Environment.CurrentDirectory + "\\file.json", serializedCollection);
+                        ErrorsBox.Text = "Complete with StatusCode: 0;\n No lexical errors found;";
                         Excel.Application application = new Excel.Application();
                         Excel.Workbook workbook;
                         Excel.Worksheet worksheet;
@@ -36,16 +37,22 @@ namespace lexanalys
                         worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
                         // class, item, line, position
                         worksheet.Cells[1, 1] = "Class";
-                        worksheet.Cells[1, 2] = "Item";
-                        worksheet.Cells[1, 3] = "Line";
-                        worksheet.Cells[1, 4] = "Position";
+                        worksheet.Cells[1, 2] = "SubClass";
+                        worksheet.Cells[1, 3] = "Item";
+                        worksheet.Cells[1, 4] = "Line";
+                        worksheet.Cells[1, 5] = "Position";
+                        worksheet.Cells[1, 6] = "Position in Class";
+                        worksheet.Cells[1, 7] = "Position in Subclass";
 
                         for (int i = 2; i < list.Count + 2; ++i)
                         {
-                            worksheet.Cells[i, 1] = list[i - 2].type;
-                            worksheet.Cells[i, 2] = list[i - 2].name;
-                            worksheet.Cells[i, 3] = list[i - 2].line;
-                            worksheet.Cells[i, 4] = list[i - 2].position;
+                            worksheet.Cells[i, 1] = list[i - 2].Class;
+                            worksheet.Cells[i, 2] = list[i - 2].SubClass;
+                            worksheet.Cells[i, 3] = list[i - 2].Value;
+                            worksheet.Cells[i, 4] = list[i - 2].line;
+                            worksheet.Cells[i, 5] = list[i - 2].position;
+                            worksheet.Cells[i, 6] = list[i - 2].pos_class;
+                            worksheet.Cells[i, 7] = list[i - 2].pos_subclass;
                         }
 
                         application.Visible = true;
@@ -54,7 +61,7 @@ namespace lexanalys
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK);
+                        ErrorsBox.Text = ex.Message;
                     }
                 }
                 else
@@ -78,5 +85,6 @@ namespace lexanalys
             };
 
         }
+
     }
 }
