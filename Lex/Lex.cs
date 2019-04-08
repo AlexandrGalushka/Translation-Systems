@@ -29,19 +29,6 @@ namespace Lex
 
         private string[] ReservedWords =
         {
-           // "for",//
-           // "while",//
-           // "do",//
-
-           // "if",//
-           // "else",//
-
-           // "int",//
-           /// "double",
-            //"bool",//
-           // "signal",//
-            //"hz",//
-
             "func",//
             "return"//
         };
