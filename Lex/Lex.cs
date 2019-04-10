@@ -32,7 +32,7 @@ namespace Lex
             "func",//
             "return"//
         };
-        private string[] Types = { "int", "double", "bool", "hz", "signal" };
+        private string[] Types = { "int", "double", "bool", "hz", "signal", "string" };
         private string[] Cycles = { "for", "while", "do" };
         private string[] Conditionals = { "if", "else" };
 
@@ -55,15 +55,16 @@ namespace Lex
 
         private Regex IndentifierReg = new Regex(@"^[a-z|A-Z]+\w*$");
         private Regex DoubleConstReg = new Regex(@"^-?\d+\.\d+$");
-        private Regex IntConstReg = new Regex(@"^-?\d+$");
+        private Regex IntConstReg = new Regex(@"^-?\d{1,10}$");
         private Regex StringConstReg = new Regex("^\"" + @"[\S|\s]*" + "\"$");
-        private Regex LiteralReg = new Regex(@"((^-?\d+\.\d+$)|(^-?\d+$)|" + "(^\"" + @"[\S|\s]*" + "\"$)|(true|false))");
+        private Regex LiteralReg = new Regex(@"((^-?\d{1,10}\.\d{1,10}$)|(^-?\d+$)|" + "(^\"" + @"[\S|\s]*" + "\"$)|(true|false))");
         private Regex space_reg = new Regex(@"\s+");
 
 
-        public List<Lexema> Analys(string[] text)
+        public LexBag Analys(string[] text)
         {
             List<Lexema> collection = new List<Lexema>();
+            List<Identifier> ids = new List<Identifier>();
             for (int i = 0; i < text.Length; i++)
             {
                 for (int j = 0; j < text[i].Length; j++)
@@ -200,14 +201,53 @@ namespace Lex
                                         }
                                     }
                                 }
+
+                                if (!tmplex.BelongTo(Functions))
+                                {
+                                    if (ids.Find(Id => Id.name == tmplex) == null)
+                                    {
+                                        int typepos = j - 1;
+                                        while (typepos >= 0 && !space_reg.IsMatch(text[i][typepos].ToString()) && !text[i][typepos].ToString().BelongTo(Delimiters))
+                                        {
+                                            
+                                            typepos--;
+                                        }
+                                        
+                                        while (typepos > 0 && space_reg.IsMatch(text[i][typepos].ToString()) && !text[i][typepos - 1].ToString().BelongTo(Delimiters))
+                                        {
+                                            typepos--;
+                                        }
+                                        string idlex = "";
+                                        while (typepos >= 0 && !space_reg.IsMatch(text[i][typepos].ToString()) && !text[i][typepos].ToString().BelongTo(Delimiters))
+                                        {
+                                            idlex = text[i][typepos].ToString() + idlex;
+                                            typepos--;
+                                        }
+                                        string type = "";
+                                        if (idlex.BelongTo(Types))
+                                        {
+                                            type = idlex;
+
+                                        }
+                                        ids.Add(new Identifier(i + 1, pos, tmplex, type));
+                                    }
+                                    else
+                                    {
+                                        ids.Find(Id => Id.name == tmplex).count++;
+                                    }
+                                }
+                                
+                                
                                 collection.Add(new Lexema(i + 1, pos, tmplex, Class, SubClass, _pos_subclass: pos_subclass));
+
                             }
                             else throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
                         }
                     }
                 }
             }
-            return collection;
+
+            return new LexBag(collection, ids);
 
         }
 
@@ -225,7 +265,15 @@ namespace Lex
         public string Class { get; set; }
         public string SubClass { get; set; }
         public string Value { get; set; }
-        public Lexema(int _line, int pos, string value, string _class, string subclass = "", int? _pos_class = null, int? _pos_subclass = null)
+        public Lexema(
+            int _line, 
+            int pos, 
+            string value, 
+            string _class, 
+            string subclass = "", 
+            int? _pos_class = null,
+            int? _pos_subclass = null
+            )
         {
             line = _line;
             position = pos;
@@ -241,6 +289,33 @@ namespace Lex
             string jsonedObject = JsonConvert.SerializeObject(this);
             return jsonedObject;
         }
+    }
+    public class Identifier
+    {
+        public int line { get; set; }
+        public int pos { get; set; }
+        public string name { get; set; }
+        public int count { get; set; }
+        public string type { get; set; }
+        public Identifier(int line, int pos, string name, string type = "")
+        {
+            this.line = line;
+            this.pos = pos;
+            this.name = name;
+            this.type = type;
+            count = 1;
+        }
+    }
+    public class LexBag
+    {
+        public IEnumerable<Lexema> Lexems { get; set; }
+        public IEnumerable<Identifier> Ids { get; set; }
+        public LexBag(IEnumerable<Lexema> lexs, IEnumerable<Identifier> ids)
+        {
+            Lexems = lexs;
+            Ids = ids;
+        }
+        
     }
 }
 

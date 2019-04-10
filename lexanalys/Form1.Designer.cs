@@ -50,7 +50,7 @@
             // 
             // ReadCode
             // 
-            this.ReadCode.Location = new System.Drawing.Point(89, 30);
+            this.ReadCode.Location = new System.Drawing.Point(78, 30);
             this.ReadCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ReadCode.Name = "ReadCode";
             this.ReadCode.Size = new System.Drawing.Size(124, 44);
@@ -60,7 +60,7 @@
             // 
             // AnalysButton
             // 
-            this.AnalysButton.Location = new System.Drawing.Point(219, 30);
+            this.AnalysButton.Location = new System.Drawing.Point(208, 30);
             this.AnalysButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AnalysButton.Name = "AnalysButton";
             this.AnalysButton.Size = new System.Drawing.Size(128, 44);
@@ -85,7 +85,7 @@
             this.ErrorsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ErrorsBox.Location = new System.Drawing.Point(12, 513);
-            this.ErrorsBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ErrorsBox.Margin = new System.Windows.Forms.Padding(4);
             this.ErrorsBox.Name = "ErrorsBox";
             this.ErrorsBox.Size = new System.Drawing.Size(868, 124);
             this.ErrorsBox.TabIndex = 5;
