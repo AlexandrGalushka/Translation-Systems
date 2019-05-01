@@ -90,7 +90,11 @@ namespace Lex
                             {
                                 Class = Operator;
                                 collection.Add(new Lexema(i + 1, j + 1, tmplex, Class, _pos_class: Operators.IndexOf(tmplex)));
-                                j++;
+                                if (tmplex.Length > 1)
+                                {
+                                    j++;
+                                }
+                                
                             }
                             else
                             {
@@ -172,6 +176,13 @@ namespace Lex
                                 }
                                 else throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
                                 collection.Add(new Lexema(i + 1, pos, tmplex, Class, SubClass));
+                                if ((collection[collection.Count - 1].SubClass == IntLiteral || collection[collection.Count - 1].SubClass == DoubleLiteral) 
+                                    && collection[collection.Count - 2].Class == Operator 
+                                    && collection[collection.Count - 2].Value == "-")
+                                {
+                                    collection.RemoveAt(collection.Count - 2);
+                                    collection[collection.Count - 1].Value = "-" + collection[collection.Count - 1].Value;
+                                }
                             }
                             else if (IndentifierReg.IsMatch(tmplex))
                             {
@@ -235,11 +246,8 @@ namespace Lex
                                     {
                                         ids.Find(Id => Id.name == tmplex).count++;
                                     }
-                                }
-                                
-                                
+                                }                        
                                 collection.Add(new Lexema(i + 1, pos, tmplex, Class, SubClass, _pos_subclass: pos_subclass));
-
                             }
                             else throw new Exception("Error at " + (i + 1) + " line at " + (j + 1) + " position");
                         }

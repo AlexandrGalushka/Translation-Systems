@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lexanalys", "lexanalys\lexa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lex", "Lex\Lex.csproj", "{F421398B-A29E-4568-88E1-A53F3D1CF7B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxParser", "SyntaxParser\SyntaxParser.csproj", "{886CE994-03CB-4BEF-A2F5-2DB396AD8FE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F421398B-A29E-4568-88E1-A53F3D1CF7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F421398B-A29E-4568-88E1-A53F3D1CF7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F421398B-A29E-4568-88E1-A53F3D1CF7B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886CE994-03CB-4BEF-A2F5-2DB396AD8FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886CE994-03CB-4BEF-A2F5-2DB396AD8FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886CE994-03CB-4BEF-A2F5-2DB396AD8FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886CE994-03CB-4BEF-A2F5-2DB396AD8FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

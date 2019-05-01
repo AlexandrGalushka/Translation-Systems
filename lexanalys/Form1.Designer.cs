@@ -33,6 +33,7 @@
             this.AnalysButton = new System.Windows.Forms.Button();
             this.numericCode = new System.Windows.Forms.RichTextBox();
             this.ErrorsBox = new System.Windows.Forms.RichTextBox();
+            this.GrammarLoad = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CodeBox
@@ -91,11 +92,21 @@
             this.ErrorsBox.TabIndex = 5;
             this.ErrorsBox.Text = "";
             // 
+            // GrammarLoad
+            // 
+            this.GrammarLoad.Location = new System.Drawing.Point(343, 30);
+            this.GrammarLoad.Name = "GrammarLoad";
+            this.GrammarLoad.Size = new System.Drawing.Size(113, 44);
+            this.GrammarLoad.TabIndex = 6;
+            this.GrammarLoad.Text = "Загрузить грамматику";
+            this.GrammarLoad.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(897, 650);
+            this.Controls.Add(this.GrammarLoad);
             this.Controls.Add(this.ErrorsBox);
             this.Controls.Add(this.numericCode);
             this.Controls.Add(this.AnalysButton);
@@ -115,6 +126,7 @@
         private System.Windows.Forms.Button AnalysButton;
         private System.Windows.Forms.RichTextBox numericCode;
         private System.Windows.Forms.RichTextBox ErrorsBox;
+        private System.Windows.Forms.Button GrammarLoad;
     }
 }
 
