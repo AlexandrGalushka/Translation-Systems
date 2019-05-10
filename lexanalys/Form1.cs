@@ -1,11 +1,9 @@
-﻿using MoreLinq.Extensions;
-using SyntaxParser;
+﻿using SyntaxParser;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace lexanalys
 {
@@ -21,36 +19,43 @@ namespace lexanalys
                     CodeBox.Text = sr.ReadToEnd();
                 }
             };
-            GrammarLoad.Click += (o, e) => 
+            GrammarLoad.Click += (o, e) =>
             {
                 try
                 {
                     List<string> res = new List<string>();
-                    var grammarLoader = new GrammarLoader();
-                    grammarLoader.Load(@"D:\grammar.txt");
-                    grammarLoader.LoadedNonTerminals = grammarLoader.LoadedNonTerminals.DistinctBy(x => x.Name).ToList();
-                    grammarLoader.LoadedTerminals = grammarLoader.LoadedTerminals.DistinctBy(x => x.Name).ToList();
+                    GrammarLoader grammarLoader = new GrammarLoader();
+                    List<string> l = new List<string>();
                     
-                    foreach(var rule in grammarLoader.LoadedRules)
+                    grammarLoader.Load(@"D:\parsegrammar2.txt");
+                    foreach (var non in grammarLoader.LoadedNonTerminals)
                     {
-                        string str = rule.LeftPart.Name + " -> ";
-                        foreach(var state in rule.RightPart)
+                        l.Add(non.Name);
+                    }
+                    l.Add("===================================================");
+                    foreach (var item in grammarLoader.LoadedTerminals)
+                    {
+                        l.Add(item.Name);
+                    }
+                    l.Add("=====================================================");
+                    foreach (var item in grammarLoader.LoadedRules)
+                    {
+                        string str = string.Empty;
+                        foreach (var n in item.RightPart)
                         {
-                            str += state.Name + " ";
+                            str += n.Name + ";";
                         }
-                        res.Add(str);
+                        l.Add(item.LeftPart.Name + "->" + str);
                     }
-                    res.Add("=====================terminals==================");
-                    foreach(var terminal in grammarLoader.LoadedTerminals)
-                    {
-                        res.Add(terminal.Name);
-                    }
-                    res.Add("=====================nonterminals==================");
-                    foreach (var nonterminal in grammarLoader.LoadedNonTerminals)
-                    {
-                        res.Add(nonterminal.Name);
-                    }
-                    CodeBox.Lines = res.ToArray<string>();   
+                    CodeBox.Lines = l.ToArray();
+                    grammarLoader.CreateRecognizeTable();
+                    CodeBox.Lines = grammarLoader.TableToString().ToArray();
+                    //SyntaxParser.SyntaxParser parser = new SyntaxParser.SyntaxParser(grammarLoader);
+                    // if (parser.IsParsed("1+2-3*(4-2)/2*3-(4*6+(5-3)*(3-1*(8-2)))"))
+                    // {
+                    //    ErrorsBox.Text = "String is parsed succesfully by syntax parser!";
+                    //  }
+
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +72,7 @@ namespace lexanalys
                         Lex.LexBag bag = lex.Analys(CodeBox.Lines);
                         List<Lex.Lexema> list = bag.Lexems.ToList();
                         List<Lex.Identifier> ids = bag.Ids.ToList();
-                        
+
                         ErrorsBox.Text = "Complete with StatusCode: 0;\n No lexical errors found;";
                         //Excel.Application application = new Excel.Application();
                         //Excel.Workbook workbook;
@@ -118,7 +123,7 @@ namespace lexanalys
                     {
                         ErrorsBox.Text = ex.Message;
                     }
-                   
+
                 }
                 else
                 {

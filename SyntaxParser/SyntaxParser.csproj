@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cell.cs" />
     <Compile Include="GrammarLoader.cs" />
     <Compile Include="IState.cs" />
     <Compile Include="ListExtensions.cs" />
@@ -58,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lex\Lex.csproj">
+      <Project>{F421398B-A29E-4568-88E1-A53F3D1CF7B3}</Project>
+      <Name>Lex</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

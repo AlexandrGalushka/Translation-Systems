@@ -48,9 +48,7 @@ namespace Lex
         };
         private string[] Operators = { "+", "-", "*", "/", "%", "<", ">", "=", "==", "!=", "<=", ">=", "&&", "||" };
         private string[] OperatorSymbols = { "+", "-", "*", "/", "%", "<", ">", "=", "!", "&", "|" };
-
         private string[] Delimiters = { "(", ")", "{", "}", ";", ",", "[", "]", " ", "\t" };    
-
         private string[] BoolLiterals = { "true", "false" };
 
         private Regex IndentifierReg = new Regex(@"^[a-z|A-Z]+\w*$");
