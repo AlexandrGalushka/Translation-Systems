@@ -1,0 +1,122 @@
+﻿<$n$start_rule>-><$t$null>
+<$n$start_rule>-><$n$declare><$n$start_rule_tail>
+	<$n$declare>-><$n$type><$n$array_opt><$n$declare_tail>
+		<$n$array_opt>-><$t$null>
+		<$n$array_opt>-><$t$array>
+			<$n$array>-><$t$array>
+		<$n$type>-><$t$INT_T>
+		<$n$type>-><$t$DOUBLE_T>
+		<$n$type>-><$t$STRING_T>
+		<$n$type>-><$t$SIGNAL_T>
+		<$n$type>-><$t$UINT_T>
+		<$n$type>-><$t$BOOL_T>
+		<$n$declare_tail>-><$n$idname><$n$assign_opt><$n$end>
+			<$n$assign_opt>-><$t$null>
+			<$n$assign_opt>-><$n$equal><$n$variable>
+				<$n$variable>-><$n$expression>
+					<$n$expression>-><$n$factor><$n$exp_lr>
+					<$n$exp_lr>-><$n$plus_minus_or_and><$n$factor><$n$exp_lr>
+					<$n$plus_minus_or_and>-><$n$plus_or_minus>
+						<$n$plus_or_minus>-><$n$plus>
+						<$n$plus_or_minus>-><$n$minus>
+					<$n$plus_minus_or_and>-><$n$or_or_and>
+						<$n$or_or_and>-><$n$or>
+						<$n$or_or_and>-><$n$and>
+					<$n$exp_lr>-><$t$null>
+					<$n$factor>-><$n$primary><$n$factor_lr>
+					<$n$factor_lr>-><$n$mul_div_some_bool_op><$n$primary><$n$factor_lr>
+						<$n$mul_div_some_bool_op>-><$n$mul_or_div>
+							<$n$mul_or_div>-><$n$mul>
+							<$n$mul_or_div>-><$n$div>
+						<$n$mul_div_some_bool_op>-><$n$some_bool_op>
+							<$n$some_bool_op>-><$n$b_notequal>
+							<$n$some_bool_op>-><$n$b_equal>
+							<$n$some_bool_op>-><$n$b_more>
+							<$n$some_bool_op>-><$n$b_more_equal>
+							<$n$some_bool_op>-><$n$b_less>
+							<$n$some_bool_op>-><$n$b_less_equal>
+					<$n$factor_lr>-><$t$null>
+					<$n$primary>-><$t$(><$n$expression><$t$)>
+					<$n$primary>-><$n$call_func>
+						<$n$call_func>-><$n$func_name><$t$(><$n$values_list><$t$)>
+							<$n$func_name>-><$n$idname>
+							<$n$func_name>-><$n$sys_idname>
+								<$n$sys_idname>-><$t$fwrite>
+								<$n$sys_idname>-><$t$read>
+								<$n$sys_idname>-><$t$write>
+								<$n$sys_idname>-><$t$timeof>
+								<$n$sys_idname>-><$t$cuts>
+								<$n$sys_idname>-><$t$convol>
+								<$n$sys_idname>-><$t$module>
+								<$n$sys_idname>-><$t$demodule>
+								<$n$sys_idname>-><$t$fread>
+							<$n$values_list>-><$t$null>
+							<$n$values_list>-><$n$variable><$n$tail_value_list>
+								<$n$tail_value_list>-><$t$,><$n$variable><$n$tail_value_list>
+								<$n$tail_value_list>-><$t$null>
+					<$n$primary>-><$n$idname><$n$quotes_arr_opt>
+						<$n$quotes_arr_opt>-><$t$null>
+						<$n$quotes_arr_opt>-><$n$quotes_arr>
+							<$n$quotes_arr>-><$t$[><$n$variable><$t$]>	
+					<$n$primary>-><$n$literal>
+						<$n$literal>-><$t$UINT>
+						<$n$literal>-><$t$INT>
+						<$n$literal>-><$t$DOUBLE>
+						<$n$literal>-><$n$quote><$t$ANY_SYMBOLS><$n$quote>
+						<$n$literal>-><$n$boolean>		
+		<$n$declare_tail>-><$n$func> 
+			<$n$func>-><$t$func><$n$idname><$t$(><$n$params><$t$)>
+<$n$start_rule>-><$n$construction>
+	<$n$construction>-><$n$if>
+		<$n$if>-><$t$if><$t$(><$n$expression><$t$)><$n$code_block><$n$else>
+		<$n$else>-><$t$null>
+		<$n$else>-><$t$else><$n$code_block>
+	<$n$construction>-><$n$for>
+		<$n$for>-><$t$for><$t$(><$n$for_var_list><$n$end><$n$expression><$n$end><$n$action><$t$)><$n$code_block>
+			<$n$for_var_list>-><$t$null>
+			<$n$var_list>-><$n$for_var_create><$n$for_tail_var_list>
+			<$n$var_list>-><$t$null>
+				<$n$for_var_create>-><$n$type><$n$idname><$n$assign>
+				<$n$for_tail_var_list>-><$t$null>
+				<$n$for_tail_var_list>-><$t$,><$n$for_var_create><$n$for_tail_var_list>
+			<$n$action>-><$n$idname><$n$equal><$n$expression>
+			<$n$action>-><$t$null>
+	<$n$construction>-><$n$while>
+		<$n$while>-><$t$while><$t$(><$n$expression><$t$)><$n$code_block>
+	<$n$construction>-><$n$do_while>
+		<$n$do_while>-><$t$do><$n$code_block><$t$while><$t$(><$n$expression><$t$)><$n$end>
+<$n$start_rule>-><$n$idname><$n$assign>
+	<$n$assign>-><$t$=><$n$assign_r_p><$n$end>
+		<$n$assign_r_p>-><$n$variable>
+		<$n$assign_r_p>-><$n$arr_init>
+			<$n$arr_init>-><$t$[><$n$variable><$n$tail_arr_init><$t$]>
+			<$n$tail_arr_init>-><$t$null>
+			<$n$tail_arr_init>-><$t$,><$n$variable><$n$tail_arr_init>
+<$n$start_rule_tail>-><$t$null>
+<$n$start_rule_tail>-><$n$start_rule>
+<$n$code_block>-><$t${><$n$start_rule><$t$}>
+<$n$end>-><$t$;>
+<$n$symbol>-><$t$symbol>
+<$n$boolean>-><$t$true>
+<$n$boolean>-><$t$false>
+<$n$minus>-><$t$->
+<$n$plus>-><$t$+>
+<$n$mul>-><$t$*>
+<$n$div>-><$t$/>
+<$n$div_r>-><$t$%>
+<$n$dot>-><$t$.>
+<$n$quote>-><$t$">
+<$n$b_equal>-><$t$==>
+<$n$b_notequal>-><$t$!=>
+<$n$b_more>-><$t$>>
+<$n$b_less>-><$t$<>
+<$n$b_less_equal>-><$t$<=>
+<$n$b_more_equal>-><$t$>=>
+<$n$or>-><$t$||>
+<$n$and>-><$t$&&>
+<$n$equal>-><$t$=>
+<$n$uint>-><$t$UINT>
+<$n$int>-><$t$INT>
+<$n$double>-><$t$DOUBLE>
+<$n$string>-><$n$quote><$t$ANY_SYMBOLS><$n$quote>
+<$n$idname>-><$t$IDNAME>	
