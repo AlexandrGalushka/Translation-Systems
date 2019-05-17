@@ -23,39 +23,36 @@ namespace lexanalys
             {
                 try
                 {
-                    List<string> res = new List<string>();
+                    //List<string> res = new List<string>();
                     GrammarLoader grammarLoader = new GrammarLoader();
-                    List<string> l = new List<string>();
+                    //List<string> l = new List<string>();
                     
-                    grammarLoader.Load(@"D:\parsegrammar2.txt");
-                    foreach (var non in grammarLoader.LoadedNonTerminals)
-                    {
-                        l.Add(non.Name);
-                    }
-                    l.Add("===================================================");
-                    foreach (var item in grammarLoader.LoadedTerminals)
-                    {
-                        l.Add(item.Name);
-                    }
-                    l.Add("=====================================================");
-                    foreach (var item in grammarLoader.LoadedRules)
-                    {
-                        string str = string.Empty;
-                        foreach (var n in item.RightPart)
-                        {
-                            str += n.Name + ";";
-                        }
-                        l.Add(item.LeftPart.Name + "->" + str);
-                    }
-                    CodeBox.Lines = l.ToArray();
+                    grammarLoader.Load(@"D:\TranslationSystems\parsegrammar2.txt");
                     grammarLoader.CreateRecognizeTable();
-                    CodeBox.Lines = grammarLoader.TableToString().ToArray();
+                   // CodeBox.Lines = grammarLoader.TableToString().ToArray();
                     //SyntaxParser.SyntaxParser parser = new SyntaxParser.SyntaxParser(grammarLoader);
-                    // if (parser.IsParsed("1+2-3*(4-2)/2*3-(4*6+(5-3)*(3-1*(8-2)))"))
-                    // {
+                    //if (parser.IsParsed("1+2-3*(4-2)/2*3-(4*6+(5-3)*(3-1*(8-2)))"))
+                    //{
                     //    ErrorsBox.Text = "String is parsed succesfully by syntax parser!";
-                    //  }
-
+                    //}
+                    var parser = new SyntaxParser.SyntaxParser(grammarLoader);
+                    var lex = new Lex.Lex();
+                    var lexs_bag = lex.Analys(CodeBox.Lines);
+                    try
+                    {
+                        if (parser.IsParsed(lexs_bag.Lexems.ToList()))
+                        {
+                            ErrorsBox.Text += "Complete";
+                        }
+                        else
+                        {
+                            ErrorsBox.Text += "Failed";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorsBox.Text = ex.Message;
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -21,6 +21,10 @@ namespace SyntaxParser
             int caret = 0;
             for(int i = 0; i < lexems.Count; i++)
             {
+                if (i == 3)
+                {
+                    i = i;
+                }
                 caret = i;
                 if (workingStack.Peek() is NonTerminal)
                 {
@@ -45,7 +49,7 @@ namespace SyntaxParser
                 }
                 else if (workingStack.Peek() is Terminal)
                 {
-                    if (workingStack.Peek() == lexems[i])
+                    if ((workingStack.Peek() as Terminal) == lexems[i])
                     {
                         workingStack.Pop();
                     }

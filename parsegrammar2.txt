@@ -1,5 +1,4 @@
-﻿<$n$start_rule>-><$t$null>
-<$n$start_rule>-><$n$declare><$n$start_rule_tail>
+﻿<$n$start_rule>-><$n$declare><$n$start_rule_tail>
 	<$n$declare>-><$n$type><$n$array_opt><$n$declare_tail>
 		<$n$array_opt>-><$t$null>
 		<$n$array_opt>-><$t$array>
@@ -39,7 +38,7 @@
 					<$n$primary>-><$t$(><$n$expression><$t$)>
 					<$n$primary>-><$n$call_func>
 						<$n$call_func>-><$n$func_name><$t$(><$n$values_list><$t$)>
-							<$n$func_name>-><$n$idname>
+							<$n$func_name>-><$n$f_idname>
 							<$n$func_name>-><$n$sys_idname>
 								<$n$sys_idname>-><$t$fwrite>
 								<$n$sys_idname>-><$t$read>
@@ -58,15 +57,14 @@
 						<$n$quotes_arr_opt>-><$t$null>
 						<$n$quotes_arr_opt>-><$n$quotes_arr>
 							<$n$quotes_arr>-><$t$[><$n$variable><$t$]>	
-					<$n$primary>-><$n$literal>
-						<$n$literal>-><$t$UINT>
+					<$n$primary>-><$n$literal>		
 						<$n$literal>-><$t$INT>
 						<$n$literal>-><$t$DOUBLE>
 						<$n$literal>-><$n$quote><$t$ANY_SYMBOLS><$n$quote>
 						<$n$literal>-><$n$boolean>		
 		<$n$declare_tail>-><$n$func> 
-			<$n$func>-><$t$func><$n$idname><$t$(><$n$params><$t$)>
-<$n$start_rule>-><$n$construction>
+			<$n$func>-><$t$func><$n$f_idname><$t$(><$n$params><$t$)>
+<$n$start_rule>-><$n$construction><$n$start_rule_tail>
 	<$n$construction>-><$n$if>
 		<$n$if>-><$t$if><$t$(><$n$expression><$t$)><$n$code_block><$n$else>
 		<$n$else>-><$t$null>
@@ -85,13 +83,14 @@
 		<$n$while>-><$t$while><$t$(><$n$expression><$t$)><$n$code_block>
 	<$n$construction>-><$n$do_while>
 		<$n$do_while>-><$t$do><$n$code_block><$t$while><$t$(><$n$expression><$t$)><$n$end>
-<$n$start_rule>-><$n$idname><$n$assign>
-	<$n$assign>-><$t$=><$n$assign_r_p><$n$end>
+<$n$start_rule>-><$n$idname><$n$assign_or_call><$n$start_rule_tail>
+	<$n$assign_or_call>-><$t$=><$n$assign_r_p><$n$end>
 		<$n$assign_r_p>-><$n$variable>
 		<$n$assign_r_p>-><$n$arr_init>
 			<$n$arr_init>-><$t$[><$n$variable><$n$tail_arr_init><$t$]>
 			<$n$tail_arr_init>-><$t$null>
 			<$n$tail_arr_init>-><$t$,><$n$variable><$n$tail_arr_init>
+<$n$start_rule>-><$n$call_func><$n$start_rule_tail>
 <$n$start_rule_tail>-><$t$null>
 <$n$start_rule_tail>-><$n$start_rule>
 <$n$code_block>-><$t${><$n$start_rule><$t$}>
@@ -115,8 +114,8 @@
 <$n$or>-><$t$||>
 <$n$and>-><$t$&&>
 <$n$equal>-><$t$=>
-<$n$uint>-><$t$UINT>
 <$n$int>-><$t$INT>
 <$n$double>-><$t$DOUBLE>
 <$n$string>-><$n$quote><$t$ANY_SYMBOLS><$n$quote>
-<$n$idname>-><$t$IDNAME>	
+<$n$idname>-><$t$IDNAME>
+<$n$f_idname>-><$t$F_IDNAME>
