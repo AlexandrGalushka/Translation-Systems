@@ -21,10 +21,6 @@ namespace SyntaxParser
             int caret = 0;
             for(int i = 0; i < lexems.Count; i++)
             {
-                if (i == 3)
-                {
-                    i = i;
-                }
                 caret = i;
                 if (workingStack.Peek() is NonTerminal)
                 {

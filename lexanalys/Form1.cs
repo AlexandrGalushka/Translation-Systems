@@ -23,18 +23,16 @@ namespace lexanalys
             {
                 try
                 {
-                    //List<string> res = new List<string>();
-                    GrammarLoader grammarLoader = new GrammarLoader();
-                    //List<string> l = new List<string>();
                     
+                    GrammarLoader grammarLoader = new GrammarLoader();
+                    
+
                     grammarLoader.Load(@"D:\TranslationSystems\parsegrammar2.txt");
                     grammarLoader.CreateRecognizeTable();
-                   // CodeBox.Lines = grammarLoader.TableToString().ToArray();
-                    //SyntaxParser.SyntaxParser parser = new SyntaxParser.SyntaxParser(grammarLoader);
-                    //if (parser.IsParsed("1+2-3*(4-2)/2*3-(4*6+(5-3)*(3-1*(8-2)))"))
-                    //{
-                    //    ErrorsBox.Text = "String is parsed succesfully by syntax parser!";
-                    //}
+                    //CodeBox.Lines = grammarLoader.TableToString().ToArray();
+
+
+
                     var parser = new SyntaxParser.SyntaxParser(grammarLoader);
                     var lex = new Lex.Lex();
                     var lexs_bag = lex.Analys(CodeBox.Lines);
