@@ -24,7 +24,35 @@ namespace SyntaxParser
                 caret = i;
                 if (workingStack.Peek() is NonTerminal)
                 {
-                    var cell = _loader.RecognizeTable.Single(x => x.NonTerminal.Name == workingStack.Peek().Name && x.Terminal == lexems[i]);
+                    Cell cell;
+                    try
+                    {
+                        cell = _loader.RecognizeTable
+                            .Single(x => x.NonTerminal.Name == workingStack.Peek().Name && x.Terminal == lexems[i]);
+                    }
+                    catch(InvalidOperationException e)
+                    {
+                        string[] expectedTerms = _loader.RecognizeTable
+                            .Where(x => x.NonTerminal.Name == workingStack.Peek().Name && x.Terminal == lexems[i])
+                            .Select(x => x.Terminal.Name + ",\n")
+                            .ToArray();
+                        string expected_terms_str = string.Empty;
+                        foreach(string str in expectedTerms)
+                        {
+                            expected_terms_str += str;
+                        }
+                        if (expectedTerms.Length > 1)
+                        {
+                            throw new Exception("Error at line: " + lexems[i].line + " position: " + lexems[i].position + ";\n" +
+                                " Unrecognize symbol;\n" + " Expected one of:\n " +
+                                expected_terms_str);
+                        }
+                        else
+                        {
+                            throw new Exception("Error at line: " + lexems[i].line + " position: " + lexems[i].position + ";\n" +
+                                " Unrecognize symbol;\n");
+                        }
+                    }
                     workingStack.Pop();
                     if (cell.Rule.RightPart[0].Name != "null")
                     {
@@ -51,12 +79,8 @@ namespace SyntaxParser
                     }
                     else
                     {
-                        throw new Exception("unexpected token");
+                        throw new Exception("unexpected token; Errors at line: " + lexems[i].line + " position: " + lexems[i].position);
                     }
-                }
-                else
-                {
-                    throw new Exception("uncaught type of term");
                 }
             }
             while (workingStack.Any())

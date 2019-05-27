@@ -60,9 +60,10 @@ namespace SyntaxParser
                 case "/": return lex.Class == "Operator" && lex.Value == "/";
                 case "*": return lex.Class == "Operator" && lex.Value == "*";
                 case "\"": return lex.Value == "\"";
-                case "%": return lex.Class == "Operator" && lex.Value == ">=";
+                case "%": return lex.Class == "Operator" && lex.Value == "%";
                 case "true": return lex.Class == "Literal" && lex.SubClass == "BoolLiteral" && lex.Value == "true";
                 case "false": return lex.Class == "Literal" && lex.SubClass == "BoolLiteral" && lex.Value == "false";
+                case "array": return lex.Class == "ReservedWord" && lex.SubClass == "Type" && lex.Value == "array";
                 
                 default: return false;
             }
