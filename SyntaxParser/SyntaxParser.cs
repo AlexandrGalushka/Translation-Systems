@@ -1,4 +1,5 @@
-﻿using Lex;
+﻿
+using Lex;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,22 @@ namespace SyntaxParser
         {
             _loader = loader;
         }
-        public bool IsParsed(IList<Lexema> lexems)
+        public bool IsParsed(IList<Lexema> lexems, out IList<Operation> opers)
         {
+            opers = new List<Operation>();
             Stack <IState> workingStack = new Stack<IState>();
-            workingStack.Push(_loader.LoadedNonTerminals[0] as NonTerminal);
+            workingStack.Push((_loader.LoadedNonTerminals[0] as NonTerminal).Clone());
             int caret = 0;
             for(int i = 0; i < lexems.Count; i++)
             {
                 caret = i;
-                if (workingStack.Peek() is NonTerminal)
+                if (workingStack.Peek() is Operation)
+                {
+                    opers.Add(workingStack.Peek() as Operation);
+                    workingStack.Pop();
+                    i = caret - 1;
+                }
+                else if (workingStack.Peek() is NonTerminal)
                 {
                     Cell cell;
                     try
@@ -38,20 +46,14 @@ namespace SyntaxParser
                             .ToArray();
                         string expected_terms_str = string.Empty;
                         foreach(string str in expectedTerms)
-                        {
                             expected_terms_str += str;
-                        }
                         if (expectedTerms.Length > 1)
-                        {
                             throw new Exception("Error at line: " + lexems[i].line + " position: " + lexems[i].position + ";\n" +
                                 " Unrecognize symbol;\n" + " Expected one of:\n " +
                                 expected_terms_str);
-                        }
                         else
-                        {
                             throw new Exception("Error at line: " + lexems[i].line + " position: " + lexems[i].position + ";\n" +
                                 " Unrecognize symbol;\n");
-                        }
                     }
                     workingStack.Pop();
                     if (cell.Rule.RightPart[0].Name != "null")
@@ -60,13 +62,12 @@ namespace SyntaxParser
                         foreach(var part in rightPart)
                         {
                             if (part is NonTerminal)
-                            {
-                                workingStack.Push(part as NonTerminal);
-                            }
+                                workingStack.Push((part as NonTerminal).Clone());
                             else if (part is Terminal)
-                            {
-                                workingStack.Push(part as Terminal);
-                            }
+                                workingStack.Push((part as Terminal).Clone());
+                            else if (part is Operation)
+                                workingStack.Push(part as Operation);
+
                         }
                     }
                     i = caret - 1;
@@ -74,35 +75,34 @@ namespace SyntaxParser
                 else if (workingStack.Peek() is Terminal)
                 {
                     if ((workingStack.Peek() as Terminal) == lexems[i])
-                    {
                         workingStack.Pop();
-                    }
                     else
-                    {
                         throw new Exception("unexpected token; Errors at line: " + lexems[i].line + " position: " + lexems[i].position);
-                    }
                 }
             }
             while (workingStack.Any())
             {
-                var cell = _loader.RecognizeTable.Single(x => x.NonTerminal.Name == workingStack.Peek().Name && x.Terminal.Name == "null");
-                workingStack.Pop();
-                if (cell.Rule.RightPart[0].Name != "null")
+                if (workingStack.Peek() is Operation)
                 {
-                    foreach(var item in cell.Rule.RightPart.Reverse())
+                    opers.Add(workingStack.Peek() as Operation);
+                    workingStack.Pop();
+                }
+                else
+                {
+                    var cell = _loader.RecognizeTable.Single(x => x.NonTerminal.Name == workingStack.Peek().Name && x.Terminal.Name == "null");
+                    workingStack.Pop();
+                    if (cell.Rule.RightPart[0].Name != "null")
                     {
-                        if (item is NonTerminal)
-                        {
-                            workingStack.Push(item as NonTerminal);
-                        }
-                        else if (item is Terminal)
-                        {
-                            workingStack.Push(item as Terminal);
-                        }
+                        foreach (var item in cell.Rule.RightPart.Reverse())
+                            if (item is NonTerminal)
+                                workingStack.Push(item as NonTerminal);
+                            else if (item is Terminal)
+                                workingStack.Push(item as Terminal);
                     }
                 }
+                
             }
-            return !workingStack.Any() && caret == lexems.Count - 1 ? true : false;
+            return !workingStack.Any() && caret == lexems.Count - 1;
         }
     }
 }

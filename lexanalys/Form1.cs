@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Lex;
+using Label = SyntaxParser.Label;
 
 namespace lexanalys
 {
+    
     public partial class Form1 : Form
     {
         GrammarLoader grammarLoader = new GrammarLoader();
@@ -50,10 +52,17 @@ namespace lexanalys
             {
                 try
                 {
+                    IList<SyntaxParser.Operation> opers;
+                    
                     var lexs_bag = lexer.Analys(CodeBox.Lines);
-                    if (parser.IsParsed(lexs_bag.Lexems.ToList()))
+                    if (parser.IsParsed(lexs_bag.Lexems.ToList(), out opers))
                     {
-                        ErrorsBox.Text = "Complete";
+                        var codegen = new CodeGenerator();
+                        ErrorsBox.Lines = codegen.generate(opers).Split('\n');
+            
+                        //ErrorsBox.Text = "Complete";
+                        //ErrorsBox.Text = tree.ToString();
+                        //CodeBox.Lines = tree.toStringArr().ToArray();
                     }
                     else
                     {
@@ -64,6 +73,9 @@ namespace lexanalys
                 {
                     ErrorsBox.Text = ex.Message;
                 }
+                //var generator = new CodeGenerator();
+                //ErrorsBox.Text = generator.Execute(generator.CreateOutputArray(CodeBox.Lines[0])).ToString();
+
             };
             CodeBox.TextChanged += (o, e) =>
             {
@@ -82,5 +94,19 @@ namespace lexanalys
 
         }
 
+    }
+    public class CodeGenerator
+    {
+        private int iterator = 0;
+        private IList<Label> labels = new List<Label>();
+        public string generate(IList<Operation> actions)
+        {
+            string res = string.Empty;
+            foreach (var action in actions)
+            {
+                res += action.toString(ref iterator, labels);
+            }
+            return res;
+        }
     }
 }

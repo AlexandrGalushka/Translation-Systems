@@ -10,7 +10,7 @@
 		<$n$type>-><$t$BOOL_T>
 		<$n$declare_tail>-><$n$idname><$n$assign_opt><$n$end>
 			<$n$assign_opt>-><$t$null>
-			<$n$assign_opt>-><$n$equal><$n$variable_or_arr_init>
+			<$n$assign_opt>-><$n$equal><$o$assign><$n$variable_or_arr_init>
 				<$n$variable_or_arr_init>-><$n$arr_init>
 						<$n$arr_init>-><$t$[><$n$variable><$n$tail_arr_init><$t$]>
 						<$n$tail_arr_init>-><$t$null>
@@ -60,8 +60,8 @@
 									<$n$primary>-><$n$idname><$n$quotes_arr_opt>
 										<$n$quotes_arr_opt>-><$t$null>
 										<$n$quotes_arr_opt>-><$n$quotes_arr>
-											<$n$quotes_arr>-><$t$[><$n$variable><$t$]>	
-									<$n$primary>-><$n$literal>		
+											<$n$quotes_arr>-><$t$[><$n$variable><$t$]><$o$add_shift>	
+									<$n$primary>-><$n$literal><$o$push_literal>		
 										<$n$literal>-><$t$INT>
 										<$n$literal>-><$t$DOUBLE>
 										<$n$literal>-><$t$"ANY_SYMBOLS">
@@ -73,11 +73,11 @@
 			<$n$tail_params>-><$t$,><$n$params>
 <$n$start_rule>-><$n$construction><$n$start_rule_tail>
 	<$n$construction>-><$n$if>
-		<$n$if>-><$t$if><$t$(><$n$expression><$t$)><$n$code_block><$n$else>
+		<$n$if>-><$t$if><$t$(><$n$expression><$o$if_after_condition><$t$)><$n$code_block><$o$if_end><$n$else>
 		<$n$else>-><$t$null>
 		<$n$else>-><$t$else><$n$code_block>
 	<$n$construction>-><$n$for>
-		<$n$for>-><$t$for><$t$(><$n$for_var_list><$n$end><$n$expression><$n$end><$n$action><$t$)><$n$code_block>
+		<$n$for>-><$t$for><$t$(><$n$for_var_list><$n$end><$o$for_return_on_condition><$n$expression><$o$for_after_condition><$n$end><$n$action><$t$)><$n$code_block><$o$for_end_opers><$o$for_end_body>
 			<$n$for_var_list>-><$t$null>
 			<$n$for_var_list>-><$n$for_var_create><$n$for_tail_var_list>
 				<$n$for_var_create>-><$n$type><$n$idname><$n$equal><$n$variable>
@@ -86,11 +86,11 @@
 			<$n$action>-><$n$idname><$n$equal><$n$variable>
 			<$n$action>-><$t$null>
 	<$n$construction>-><$n$while>
-		<$n$while>-><$t$while><$t$(><$n$expression><$t$)><$n$code_block>
+		<$n$while>-><$t$while><$t$(><$o$while_return_on_condition><$n$expression><$o$while_after_condition><$t$)><$n$code_block><$o$while_end_opers><$o$while_end_body>
 	<$n$construction>-><$n$do_while>
-		<$n$do_while>-><$t$do><$n$code_block><$t$while><$t$(><$n$expression><$t$)><$n$end>
-<$n$start_rule>-><$n$idname><$n$assign_or_call><$n$start_rule_tail>
-	<$n$assign_or_call>-><$t$=><$n$assign_r_p><$n$end>
+		<$n$do_while>-><$t$do><$o$do_while_start_body><$n$code_block><$t$while><$t$(><$n$expression><$o$do_while_after_cond><$t$)><$n$end>
+<$n$start_rule>-><$n$idname><$n$quotes_arr_opt><$n$assign_or_call><$n$start_rule_tail>
+	<$n$assign_or_call>-><$t$=><$o$assign><$n$assign_r_p><$n$end>
 		<$n$assign_r_p>-><$n$variable>
 		<$n$assign_r_p>-><$n$arr_init>
 <$n$start_rule>-><$n$call_func><$n$end><$n$start_rule_tail>
@@ -102,24 +102,24 @@
 <$n$symbol>-><$t$symbol>
 <$n$boolean>-><$t$true>
 <$n$boolean>-><$t$false>
-<$n$minus>-><$t$->
-<$n$plus>-><$t$+>
-<$n$mul>-><$t$*>
-<$n$div>-><$t$/>
+<$n$minus>-><$t$-><$o$sub>
+<$n$plus>-><$t$+><$o$add>
+<$n$mul>-><$t$*><$o$mul>
+<$n$div>-><$t$/><$o$div>
 <$n$div_r>-><$t$%>
 <$n$dot>-><$t$.>
 <$n$quote>-><$t$">
-<$n$b_equal>-><$t$==>
-<$n$b_notequal>-><$t$!=>
-<$n$b_more>-><$t$>>
-<$n$b_less>-><$t$<>
-<$n$b_less_equal>-><$t$<=>
-<$n$b_more_equal>-><$t$>=>
-<$n$or>-><$t$||>
-<$n$and>-><$t$&&>
+<$n$b_equal>-><$t$==><$o$bool_equal>
+<$n$b_notequal>-><$t$!=><$o$bool_non_equal>
+<$n$b_more>-><$t$>><$o$bool_more>
+<$n$b_less>-><$t$<><$o$bool_less>
+<$n$b_less_equal>-><$t$<=><$o$bool_less_equal>
+<$n$b_more_equal>-><$t$>=><$o$bool_more_equal>
+<$n$or>-><$t$||><$o$bool_or>
+<$n$and>-><$t$&&><$o$bool_and>
 <$n$equal>-><$t$=>
 <$n$int>-><$t$INT>
 <$n$double>-><$t$DOUBLE>
 <$n$string>-><$n$quote><$t$ANY_SYMBOLS><$n$quote>
-<$n$idname>-><$t$IDNAME>
+<$n$idname>-><$t$IDNAME><$o$push_id>
 <$n$f_idname>-><$t$F_IDNAME>

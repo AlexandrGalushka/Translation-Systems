@@ -9,9 +9,15 @@ namespace SyntaxParser
     public class NonTerminal : IState
     {
         public string Name { get; set; }
+
         public NonTerminal(string name)
         {
             Name = name;
+        }
+        public NonTerminal Clone()
+        {
+            var nonterm = new NonTerminal(Name);
+            return nonterm;
         }
     }
 }

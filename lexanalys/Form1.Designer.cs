@@ -45,7 +45,7 @@
             this.CodeBox.Location = new System.Drawing.Point(78, 91);
             this.CodeBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.CodeBox.Name = "CodeBox";
-            this.CodeBox.Size = new System.Drawing.Size(807, 415);
+            this.CodeBox.Size = new System.Drawing.Size(807, 255);
             this.CodeBox.TabIndex = 0;
             this.CodeBox.Text = "";
             // 
@@ -77,7 +77,7 @@
             this.numericCode.Location = new System.Drawing.Point(12, 91);
             this.numericCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numericCode.Name = "numericCode";
-            this.numericCode.Size = new System.Drawing.Size(67, 415);
+            this.numericCode.Size = new System.Drawing.Size(67, 255);
             this.numericCode.TabIndex = 4;
             this.numericCode.Text = "";
             // 
@@ -85,10 +85,10 @@
             // 
             this.ErrorsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ErrorsBox.Location = new System.Drawing.Point(12, 513);
+            this.ErrorsBox.Location = new System.Drawing.Point(12, 352);
             this.ErrorsBox.Margin = new System.Windows.Forms.Padding(4);
             this.ErrorsBox.Name = "ErrorsBox";
-            this.ErrorsBox.Size = new System.Drawing.Size(868, 124);
+            this.ErrorsBox.Size = new System.Drawing.Size(868, 285);
             this.ErrorsBox.TabIndex = 5;
             this.ErrorsBox.Text = "";
             // 

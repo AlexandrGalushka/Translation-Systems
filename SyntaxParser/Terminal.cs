@@ -1,4 +1,5 @@
-﻿using Lex;
+﻿
+using Lex;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace SyntaxParser
         {
             Name = name;
         }
+        public Terminal Clone()
+        {
+            var term = new Terminal(Name);
+            return term;
+        }
+        
         public static bool operator ==(Terminal term, Lexema lex)
         {
             switch (term.Name)

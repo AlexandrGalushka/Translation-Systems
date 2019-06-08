@@ -94,6 +94,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Generator\Generator.csproj">
+      <Project>{c0817285-10d6-4c8d-9961-4f2375c135bd}</Project>
+      <Name>Generator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lex\Lex.csproj">
       <Project>{F421398B-A29E-4568-88E1-A53F3D1CF7B3}</Project>
       <Name>Lex</Name>

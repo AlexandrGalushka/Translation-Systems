@@ -106,9 +106,14 @@ namespace SyntaxParser
         {
             if (nonTerminal.Name == rule.LeftPart.Name)
             {
-                if (rule.RightPart[0] is NonTerminal)
+                int i = 0;
+                while(!(rule.RightPart[i] is Terminal) && !(rule.RightPart[i] is NonTerminal))
                 {
-                    List<Rule> rules = LoadedRules.Where(x => x.LeftPart.Name == rule.RightPart[0].Name).ToList();
+                    i++;
+                }
+                if (rule.RightPart[i] is NonTerminal)
+                {
+                    List<Rule> rules = LoadedRules.Where(x => x.LeftPart.Name == rule.RightPart[i].Name).ToList();
                     foreach (Rule rule_it in rules)
                     {
                         if (CanGoFromNonTerminalToTerminal(rule.RightPart[0] as NonTerminal, terminal, rule_it))
@@ -118,9 +123,9 @@ namespace SyntaxParser
                     }
                     return false;
                 }
-                else if (rule.RightPart[0] is Terminal)
+                else if (rule.RightPart[i] is Terminal)
                 {
-                    return rule.RightPart[0].Name == terminal.Name || rule.RightPart[0].Name == "null" ? true : false;
+                    return rule.RightPart[i].Name == terminal.Name || rule.RightPart[0].Name == "null";
                 }
             }
             else
@@ -131,8 +136,8 @@ namespace SyntaxParser
         }
         private Rule ParseString(string str, int idx)
         {
-            Regex stateReg = new Regex(@"<\$[n,t]\$[^$]*>");
-            Regex stateTypeReg = new Regex(@"\$(n|t)\$"); //need fix this
+            Regex stateReg = new Regex(@"<\$[n,t,o]\$[^$]*>");
+            Regex stateTypeReg = new Regex(@"\$(n|t|o)\$"); 
             Regex nameReg = new Regex(@"\$[^\$]*>");
             Rule Rule = new Rule();
             MatchCollection matches = stateReg.Matches(str);
@@ -169,6 +174,10 @@ namespace SyntaxParser
                         Terminal term = new Terminal(name);
                         LoadedTerminals.Add(term);
                         Rule.RightPart.Add(term);
+                        break;
+                    case "o":
+                        Operation operation = new Operation(name);
+                        Rule.RightPart.Add(operation);
                         break;
                     default:
                         throw new Exception(string.Format("In {0} line type of state is not valid", idx + 1));
